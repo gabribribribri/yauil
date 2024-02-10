@@ -1,14 +1,38 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use sfml::{
+    graphics::{Color, RenderTarget, RenderWindow},
+    window::Event,
+};
+
+pub struct Engine<'a> {
+    window: &'a mut RenderWindow,
+    widgets: Vec<Widget>,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+impl<'a> Engine<'a> {
+    pub fn new(window: &'a mut RenderWindow) -> Engine {
+        return Self {
+            window,
+            widgets: Vec::new(),
+        };
     }
+
+    pub fn loop_draw(&mut self) {
+        loop {
+            while let Some(event) = self.window.poll_event() {
+                match event {
+                    Event::Closed => return,
+                    _ => (),
+                }
+            }
+            self.window.clear(Color::BLACK);
+            self.window.display();
+        }
+    }
+    pub fn add_widget(&mut self, widget: Widget) {
+        self.widgets.push(widget)
+    }
+}
+
+pub enum Widget {
+    Label { text: String },
 }
