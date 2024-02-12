@@ -28,6 +28,10 @@ impl<'a> Engine<'a> {
                 }
             }
             self.window.clear(Color::BLACK);
+            let mut vertical_offset = 0f32;
+            for widget in &mut self.widgets {
+                widget.draw_widget(&mut self.window, vertical_offset);
+            }
             self.window.display();
         }
     }
